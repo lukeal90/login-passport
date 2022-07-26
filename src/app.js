@@ -12,15 +12,15 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const passport = require('passport');
 const { initPassport } = require('./helpers/passport.config');
-
+const { argv } = require('./utils/index');
 const {
     BODY_LIMIT,
     NODE_ENV,
-    PORT,
     DB,
     MONGO_URL
 } = process.env;
 const DbManager = new InstanceManagementService().build(DB);
+const PORT = Number(argv.p || process.env.PORT || 8080);
 class App {
     constructor() {
         this.dbManagement = DbManager;

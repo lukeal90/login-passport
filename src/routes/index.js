@@ -5,6 +5,7 @@ const {
 
 const Errors = require('../helpers/error')
 const Logger = require('../helpers/logger');
+const api = require('./api');
 
 class Routes {
     static configure(app) {
