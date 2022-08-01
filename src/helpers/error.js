@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-
+const Logger = require('../helpers/logger');
 class Errors {
     static get BAD_REQUEST() {
         return 400;
@@ -39,20 +39,10 @@ class Errors {
         return error;
     }
 
-    static sendError(res) {
-        const img = fs.readFileSync(path.resolve(__dirname, '..', '..', 'public/U3DoNsS.jpg'));
-        res.writeHead(Errors.UNAUTHORIZED, { 'Content-Type': 'text/html' });
-        res.write('<html><body style="background-color: #000"><h2 style="color: #fff; text-align: center; left: 0, right: 0">Entiendo que quer&eacute;s ver lo que hay pero necesitas permisos especiales</h2>');
-        res.write(`<img style="margin-left: 35%" width="400px" src="data:image/jpeg;base64,${Buffer.from(img).toString('base64')}`);
-        return res.end('"/></body></html>');
-    }
-
-    static send404(res) {
-        res.writeHead(Errors.NOT_FOUND, { 'Content-Type': 'text/html' });
-        res.write('<html><head><link rel="icon" type="image/png" sizes="64x64"></head>');
-        res.write('<body style="background-color: #000"><h2 style="margin-top: 10%; color: #fff; text-align: center; left: 0, right: 0">Encontraste algo Oculto......</h2>');
-        res.write('<h4 style="color: #fff; text-align: center; left: 0, right: 0">404 P&aacute;gina no encontrada</h4>');
-        return res.end('</body></html>');
+    static send404(req, res) {
+        const error_message = `ROUTE : ${req.originalUrl} METHOD : ${req.method} doesnt exist`;
+        Logger.warn(error_message)
+        res.status(404).json({"message": error_message})
     }
 }
 

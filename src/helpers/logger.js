@@ -1,5 +1,4 @@
 const winston = require('winston');
-const fs = require('fs');
 const packageJson = require('../../package.json');
 
 const {
@@ -12,7 +11,7 @@ const {
         align
     },
     transports: {
-        Console, Stream
+        Console, File
     }
 } = winston;
 
@@ -20,12 +19,12 @@ const myCustomLevels = {
     levels: {
         error: 0,
         info: 2,
-        debug: 1
+        warn: 1
     },
     colors: {
         error: 'red',
         info: 'green',
-        debug: 'yellow'
+        warn: 'yellow'
     }
 };
 
@@ -50,29 +49,20 @@ const getTransports = () => {
         }))
     ];
 
-    
-    // transportOpts.push(
-    //     new Stream({
-    //         format,
-    //         stream: fs.createWriteStream(`/tmp/${packageJson.name.replace('-', '_')}_info.log`,
-    //             {
-    //                 encoding: 'utf8',
-    //                 flags: 'a'
-    //             })
-    //     })
-    // );
-    // transportOpts.push(
-    //     new Stream({
-    //         level: 'error',
-    //         format,
-    //         stream: fs.createWriteStream(`/tmp/${packageJson.name.replace('-', '_')}_error.log`,
-    //             {
-    //                 encoding: 'utf8',
-    //                 flags: 'a'
-    //             }
-    //         )
-    //     })
-    // );
+    transportOpts.push(
+        new File({
+            filename: './logs/error.log',
+            level: 'error',
+            format,
+          })
+    );
+    transportOpts.push(
+        new File({
+            filename: './logs/warn.log',
+            level: 'warn',
+            format,
+          }),
+    );
     
     return transportOpts;
 };

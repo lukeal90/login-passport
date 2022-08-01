@@ -13,6 +13,7 @@ const MongoStore = require("connect-mongo");
 const passport = require('passport');
 const { initPassport } = require('./helpers/passport.config');
 const { argv } = require('./utils/index');
+const compression = require("compression");
 const {
     BODY_LIMIT,
     NODE_ENV,
@@ -44,6 +45,7 @@ class App {
     _middleWares() {
         this.app.use(bodyParser.json({limit: BODY_LIMIT}));
         this.app.use(bodyParser.urlencoded({extended: true}));
+        this.app.use(compression({ level: 9 }));
         this.app.use(express.static(path.resolve('public')));
         initPassport();
         this.app.use(
